@@ -4,7 +4,7 @@ Supplementary information to the submitted manuscript  "Computational correction
 
 The Jupyter notebook (Correcting_Spreading_of_Signal_Notebook.ipynb) contains Python code for the analysis and correction of index-swapping, including the generation of Figures 1, 2A-C, S1 and S2 in the manuscript (written by Anton JM Larsson). The notebook (sandbergCorrection_analyzeClustering.ipynb) contains the R code to reproduce Figures 2D-E and S3 of the manuscript (written by Geoff Stanley).
 
-## unspread.py usage example
+## unspread.py usage
 
 usage: unspread.py [-h] [--i5 STRING] [--i7 STRING] [--rows INTEGER]
                    [--cols INTEGER] [--idx_col INTEGER] [--sep CHAR]
@@ -50,6 +50,8 @@ Unspread: Computational correction of barcode index spreading
                        
   --column BOOLEAN     If each column is represents a cell, otherwise each
                        row. (default: 1 (True), set to 0 otherwise (False))
+
+## unspread.py example
 
 The unspread.py script requires a table of read counts supplied as a .csv file with added information regarding each cell's index barcodes. For example from the first plate in the manuscript:
 
