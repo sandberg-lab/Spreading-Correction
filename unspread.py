@@ -4,7 +4,6 @@ import argparse
 import pandas as pd
 import numpy as np
 from matplotlib import use
-use('Agg')
 import matplotlib.pyplot as plt
 from statsmodels.sandbox.stats.multicomp import multipletests
 import statsmodels.api as sm
