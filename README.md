@@ -4,7 +4,25 @@ Supplementary information to the submitted manuscript  "Computational correction
 
 The Jupyter notebook (Correcting_Spreading_of_Signal_Notebook.ipynb) contains Python code for the analysis and correction of index-swapping, including the generation of Figures 1, 2A-C, S1 and S2 in the manuscript (written by Anton JM Larsson). The notebook (sandbergCorrection_analyzeClustering.ipynb) contains the R code to reproduce Figures 2D-E and S3 of the manuscript (written by Geoff Stanley).
 
-## unspread.py usage
+## _unspread.py_
+
+_unspread.py_ estimates the percentage of contaminating reads in the experiment, estimates the 'rate of spreading', and corrects the read counts if the experiment is affected to a sufficient degree. The _unspread.py_ script requires a table of read counts supplied as a .csv file with added information regarding each cell's index barcodes. 
+
+### System Requirements
+
+_unspready.py_ is a python3 script with dependencies:
+
+```
+pandas: 0.19.2
+numpy: 1.9.0
+matplotlib: 2.0
+statsmodels: 0.6.1
+scipy: 1.0.0
+patsy: 0.4.1
+```
+No further installation is needed.
+
+### Usage
 
 usage: unspread.py [-h] [--i5 STRING] [--i7 STRING] [--rows INTEGER]
                    [--cols INTEGER] [--idx_col INTEGER] [--sep CHAR]
@@ -50,10 +68,14 @@ Unspread: Computational correction of barcode index spreading
                        
   --column BOOLEAN     If each column is represents a cell, otherwise each
                        row. (default: 1 (True), set to 0 otherwise (False))
+                       
+### Output
 
-## unspread.py example
+_unspread.py_ outputs a set of figures with diagnostic information comparable to the figures in the article. A log file is also saved. If the plate is affected a corrected .csv file will also be made.
 
-The unspread.py script requires a table of read counts supplied as a .csv file with added information regarding each cell's index barcodes. For example from the first plate in the manuscript:
+### Example
+
+An example from the first plate in the manuscript:
 
 |cell.name | N.index.name |	S.index.name |	0610005C13Rik |	0610007C21Rik  | ...|
 | --- | --- | --- | --- | --- | --- |
@@ -66,8 +88,10 @@ To run the correction of the first plate in the manuscript:
 
 ./unspread.py mHSC_plate1HiSeq_counts_IndexInfo.csv --i5 'S.index.name' --i7 'N.index.name' --column 0 --sep ' '
 
-With expected output:
+This command should not take longer than a minute.
 
+The expected command line output is:
+```
 Reading file: mHSC_plate1HiSeq_counts_IndexInfo.csv
 
 Estimating spreading from mHSC_plate1HiSeq_counts_IndexInfo.csv
@@ -85,3 +109,4 @@ Saving log file from analysis to mHSC_plate1HiSeq_counts_IndexInfo_unspread.log
 Correcting spreading for each gene
 
 Saving correction to mHSC_plate1HiSeq_counts_IndexInfo_corrected.csv
+```
