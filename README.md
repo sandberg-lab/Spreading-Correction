@@ -85,9 +85,9 @@ An example from the first plate in the manuscript:
 In this particular example, genes are structured by column and cells by rows but the converse is also supported.
 
 To run the correction of the first plate in the manuscript:
-
+```
 ./unspread.py mHSC_plate1HiSeq_counts_IndexInfo.csv --i5 'S.index.name' --i7 'N.index.name' --column 0 --sep ' '
-
+```
 This command should not take longer than a minute.
 
 The expected command line output is:
