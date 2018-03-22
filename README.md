@@ -92,9 +92,9 @@ This command should not take longer than a minute.
 
 The expected command line output is:
 ```
-Reading file: mHSC_plate1HiSeq_counts_IndexInfo.csv
+Reading file: mHSC_plate1HiSeq_counts_IndexInfo_anon.csv
 
-Estimating spreading from mHSC_plate1HiSeq_counts_IndexInfo.csv
+Estimating spreading from mHSC_plate1HiSeq_counts_IndexInfo_anon.csv
 
 Found expression to be biased along a certain column and row combination 753 times out of 899
 
@@ -102,13 +102,13 @@ Estimated the median rate of spreading to be 0.0098
 
 Estimated fraction of spread reads to be 0.14827 and variance explained R-squared = 0.8996
 
-Saving figure from analysis to mHSC_plate1HiSeq_counts_IndexInfo_figures.pdf
+Saving figure from analysis to mHSC_plate1HiSeq_counts_IndexInfo_anon_figures.pdf
 
-Saving log file from analysis to mHSC_plate1HiSeq_counts_IndexInfo_unspread.log
+Saving log file from analysis to mHSC_plate1HiSeq_counts_IndexInfo_anon_unspread.log
 
 Correcting spreading for each gene
 
-Saving correction to mHSC_plate1HiSeq_counts_IndexInfo_corrected.csv
+Saving correction to mHSC_plate1HiSeq_counts_IndexInfo_anon_corrected.csv
 ```
 
 The genes in the manuscript, _Mki67_ and _Tacr_, have ID 7963 and 12319 respectively.
