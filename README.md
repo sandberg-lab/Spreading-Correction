@@ -86,7 +86,7 @@ In this particular example, genes are structured by column and cells by rows but
 
 To run the correction of the first plate in the manuscript:
 ```
-./unspread.py mHSC_plate1HiSeq_counts_IndexInfo.csv --i5 'S.index.name' --i7 'N.index.name' --column 0 --sep ' '
+./unspread.py mHSC_plate1HiSeq_counts_IndexInfo_anon.csv --i5 'S.index.name' --i7 'N.index.name' --column 0 --sep ' '
 ```
 This command should not take longer than a minute.
 
@@ -110,3 +110,5 @@ Correcting spreading for each gene
 
 Saving correction to mHSC_plate1HiSeq_counts_IndexInfo_corrected.csv
 ```
+
+The genes in the manuscript, _Mki67_ and _Tacr_, have ID 7963 and 12319 respectively.
