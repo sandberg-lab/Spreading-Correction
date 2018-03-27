@@ -68,8 +68,8 @@ df = df.sort_values(by=[i5_index_name,i7_index_name], ascending=[False, True])
 df = df.loc[:,~df.columns.duplicated()]
 df_noindex = df.drop([i5_index_name,i7_index_name], axis=1).astype(np.int)
 
-# Check if the 
-if (df_noindex.shape[0+column] != n_rows*n_cols):
+# Check if the shape makes sense
+if (df_noindex.shape[0] != n_rows*n_cols):
     print('Number of cells in count file not the same as specified, exiting...')
     quit()
 
