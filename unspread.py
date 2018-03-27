@@ -9,9 +9,10 @@ from statsmodels.sandbox.stats.multicomp import multipletests
 import statsmodels.api as sm
 from scipy.stats import hypergeom
 from scipy.linalg import solve_sylvester
+from scipy.stats import binom_test
 from patsy import dmatrices
 
-
+# Used for getting genes to estimate spreading
 def num_counts(col, high):
     return np.sum(col > high)
 
@@ -47,9 +48,13 @@ idx_in_id = args.idx_in_id[0]
 delim_idx = args.delim_idx[0]
 
 print('Reading file: {}'.format(filename))
+
+# Load in count table
 df = pd.read_csv(filename, index_col=idx, sep=separator)
+# Transform the data frame if each column represents a cell
 if np.bool_(column):
     df = df.T
+# Turns the end of the cell id strings into index name ids
 if np.bool_(idx_in_id):
     i5_index_list = []
     i7_index_list= []
@@ -63,7 +68,8 @@ df = df.sort_values(by=[i5_index_name,i7_index_name], ascending=[False, True])
 df = df.loc[:,~df.columns.duplicated()]
 df_noindex = df.drop([i5_index_name,i7_index_name], axis=1).astype(np.int)
 
-if (len(df.index) != n_rows*n_cols):
+# Check if the 
+if (df_noindex.shape[0+column] != n_rows*n_cols):
     print('Number of cells in count file not the same as specified, exiting...')
     quit()
 
@@ -71,6 +77,7 @@ base = os.path.splitext(os.path.basename(filename))[0]
 
 print('Estimating spreading from {}'.format(filename))
 
+# Get genes to estimate the rate of spreading and fraction of contaminating reads.
 names_list = []
 for i, col in df_noindex.items():
     if num_counts(col, high) == 1:
@@ -80,6 +87,7 @@ n_names = len(names_list)
 if n_names == 0:
     print('Found no genes useable to estimate spreading, exiting...')
     quit()
+# Count the number of true and spread counts respectively
 true_counts = np.zeros(n_names)
 spread_counts = np.zeros((n_names, n_rows+n_cols - 2))
 num_wells_counts = np.zeros(n_names)
@@ -91,14 +99,15 @@ for i,namn in enumerate(names_list):
         spread_counts[i] = np.append(np.append(df_noindex[namn].values.reshape(n_rows,n_cols)[w[0], :w[1]],df_noindex[namn].values.reshape(n_rows,n_cols)[w[0], w[1]+1:] ), np.append(df_noindex[namn].values.reshape(n_rows,n_cols)[:w[0], w[1]],df_noindex[namn].values.reshape(n_rows,n_cols)[w[0]+1:, w[1]] ))
         num_wells_counts[i] = np.sum(df_noindex[namn].values != 0) - 1
 
+ 
 prop_spread = np.zeros((len(names_list), n_rows+n_cols - 2))
 
 for i in range(len(names_list)):
     prop_spread[i] = spread_counts[i]/true_counts[i]
 
-from scipy.stats import binom_test
 test_bias = np.zeros(n_names)
 
+# Test whether the spread counts are biased along the column and row of the source well.
 for i in range(len(names_list)):
     test_bias[i] = hypergeom.sf(np.sum(spread_counts[i] != 0)-1, n_rows*n_cols-1, n_rows+n_cols - 2, num_wells_counts[i])
 
@@ -122,7 +131,8 @@ if np.sum(mt) != 0:
     ax2.text(0.7, 0.9,'Median: ' + str(np.round(rate_spreading,5)), ha='center', va='center', transform=ax2.transAxes)
     ax2.set_ylabel('Frequency (Wells)')
     ax2.set_xlabel(r'Rate of spreading ($log_{10}$)')
-
+    
+    # Use linear regression to estimate the fraction of spread reads
     spread_counts = spread_counts[test_bias != 1][mt]
     true_counts = true_counts[test_bias != 1][mt]
     true_median = np.median(true_counts)
@@ -155,11 +165,12 @@ else:
     with open('{}_unspread.log'.format(base), "w") as log_file:
         print('# {}\n# {}\n# {}\n# {}\n{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(filename, bias_log, rate_log, ols_log, filename, np.sum(mt), len(mt), 'NaN', 'NaN', 'NaN', 'Nan'), file=log_file)
 
-
+# You can set the threshold yourself
 if np.sum(mt) == 0 or model.params['true'] < threshold:
-    print('The experiment shows no or an acceptable amount of spreading, correction is not neccesary. Exiting...')
+    print('The experiment shows no or an acceptable amount of spreading, correction is not neccessary. Exiting...')
     quit()
 
+# Setting the rate of spreading matricies
 column_spread = np.zeros((n_rows, n_rows))
 row_spread = np.zeros((n_cols,n_cols))
 column_spread[:,:] = rate_spreading
@@ -167,6 +178,7 @@ row_spread[:,:] = rate_spreading
 np.fill_diagonal(column_spread, 0.5 - rate_spreading/2)
 np.fill_diagonal(row_spread, 0.5 - rate_spreading/2)
 
+# The function which does the correction, you can set the cutoff yourself
 def adjust_reads(mat, column_spread = column_spread, row_spread = row_spread, cutoff = c, r = n_rows, c = n_cols):
     mat = np.array(mat).flatten()
     mat = mat.reshape(r,c)
@@ -181,6 +193,7 @@ adj_list = []
 for i, col in df_noindex.items():
     adj_list.append(adjust_reads(col).flatten())
 
+# Put correction into a dataframe and save to a .csv file
 df_adj = pd.DataFrame(data=adj_list, index = df_noindex.columns.values, columns= df_noindex.index.values).T
 
 df_adj = pd.concat([df[i7_index_name], df[i5_index_name] , df_adj], axis = 1)
