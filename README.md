@@ -1,6 +1,6 @@
 # Spreading-Correction
 
-Supplementary information to the Correspondence"Computational correction of index switching in multiplexed sequencing libraries" by Anton JM Larsson, Geoff	Stanley, Rahul	Sinha, Irving	L.	Weissman,	Rickard	Sandberg in Nature Methods (http://dx.doi.org/10.1038/nmeth.4666)
+Supplementary information to the Correspondence "Computational correction of index switching in multiplexed sequencing libraries" by Anton JM Larsson, Geoff	Stanley, Rahul	Sinha, Irving	L.	Weissman,	Rickard	Sandberg available now in Nature Methods (http://dx.doi.org/10.1038/nmeth.4666)
 
 The Jupyter notebook (Correcting_Spreading_of_Signal_Notebook.ipynb) contains Python code for the analysis and correction of index-swapping, including the generation of Figures 1, 2A-C, S1 and S2 in the manuscript (written by Anton JM Larsson). The notebook (sandbergCorrection_analyzeClustering.ipynb) contains the R code to reproduce Figures 2D-E and S3 of the manuscript (written by Geoff Stanley).
 
