@@ -65,6 +65,7 @@ if np.bool_(idx_in_id):
     df[i5_index_name] = i5_index_list
     df[i7_index_name] = i7_index_list
 df = df.sort_values(by=[i5_index_name,i7_index_name], ascending=[False, True])
+df = df.fillna(0)
 df = df.loc[:,~df.columns.duplicated()]
 df_noindex = df.drop([i5_index_name,i7_index_name], axis=1).astype(np.int)
 
@@ -99,7 +100,7 @@ for i,namn in enumerate(names_list):
         spread_counts[i] = np.append(np.append(df_noindex[namn].values.reshape(n_rows,n_cols)[w[0], :w[1]],df_noindex[namn].values.reshape(n_rows,n_cols)[w[0], w[1]+1:] ), np.append(df_noindex[namn].values.reshape(n_rows,n_cols)[:w[0], w[1]],df_noindex[namn].values.reshape(n_rows,n_cols)[w[0]+1:, w[1]] ))
         num_wells_counts[i] = np.sum(df_noindex[namn].values != 0) - 1
 
- 
+
 prop_spread = np.zeros((len(names_list), n_rows+n_cols - 2))
 
 for i in range(len(names_list)):
@@ -131,7 +132,7 @@ if np.sum(mt) != 0:
     ax2.text(0.7, 0.9,'Median: ' + str(np.round(rate_spreading,5)), ha='center', va='center', transform=ax2.transAxes)
     ax2.set_ylabel('Frequency (Wells)')
     ax2.set_xlabel(r'Rate of spreading ($log_{10}$)')
-    
+
     # Use linear regression to estimate the fraction of spread reads
     spread_counts = spread_counts[test_bias != 1][mt]
     true_counts = true_counts[test_bias != 1][mt]
