@@ -65,7 +65,6 @@ if np.bool_(idx_in_id):
     df[i5_index_name] = i5_index_list
     df[i7_index_name] = i7_index_list
 df = df.sort_values(by=[i5_index_name,i7_index_name], ascending=[False, True])
-df = df.fillna(0)
 df = df.loc[:,~df.columns.duplicated()]
 df_noindex = df.drop([i5_index_name,i7_index_name], axis=1).astype(np.int)
 
