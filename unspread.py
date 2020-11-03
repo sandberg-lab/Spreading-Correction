@@ -31,6 +31,7 @@ parser.add_argument('--t', metavar='FLOAT', default=[0.05], type=float, nargs=1,
 parser.add_argument('--idx_in_id', metavar='BOOLEAN', default=[0], type=float, nargs=1, help='If the index is in the cell id (i.e. cellid_i5_i7) (Default: 0 (False), set to 1 otherwise (True))')
 parser.add_argument('--delim_idx', metavar='CHAR', default=['_'], type=str, nargs=1, help='If the index is in the cell id, the delimiting character (Default: \'_\')')
 parser.add_argument('--column', metavar='BOOLEAN', default=[1], type=int, nargs=1, help='If each column is represents a cell, otherwise each row. (default: 1 (True), set to 0 otherwise (False))')
+parser.add_argument('--rate', metavar='FLOAT', default=[0.0], type=float, nargs=1, help='Set spreading rate manually (overrides any estimated rate).')
 
 args = parser.parse_args()
 filename = args.filename[0]
@@ -46,6 +47,7 @@ threshold = args.t[0]
 column = args.column[0]
 idx_in_id = args.idx_in_id[0]
 delim_idx = args.delim_idx[0]
+r = args.rate[0]
 
 print('Reading file: {}'.format(filename))
 
@@ -166,10 +168,11 @@ else:
         print('# {}\n# {}\n# {}\n# {}\n{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(filename, bias_log, rate_log, ols_log, filename, np.sum(mt), len(mt), 'NaN', 'NaN', 'NaN', 'Nan'), file=log_file)
 
 # You can set the threshold yourself
-if np.sum(mt) == 0 or model.params['true'] < threshold:
+if (np.sum(mt) == 0 or model.params['true'] < threshold) and r != 0.0:
     print('The experiment shows no or an acceptable amount of spreading, correction is not neccessary. Exiting...')
     quit()
-
+if r != 0.0:
+    rate_spreading = r
 # Setting the rate of spreading matricies
 column_spread = np.zeros((n_rows, n_rows))
 row_spread = np.zeros((n_cols,n_cols))
