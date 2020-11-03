@@ -173,7 +173,7 @@ if (np.sum(mt) == 0 or model.params['true'] < threshold) and r == 0.0:
     quit()
 if r != 0.0:
     rate_spreading = r
-# Setting the rate of spreading matricies
+# Setting the rate of spreading matrices
 column_spread = np.zeros((n_rows, n_rows))
 row_spread = np.zeros((n_cols,n_cols))
 column_spread[:,:] = rate_spreading
