@@ -168,7 +168,7 @@ else:
         print('# {}\n# {}\n# {}\n# {}\n{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(filename, bias_log, rate_log, ols_log, filename, np.sum(mt), len(mt), 'NaN', 'NaN', 'NaN', 'Nan'), file=log_file)
 
 # You can set the threshold yourself
-if (np.sum(mt) == 0 or model.params['true'] < threshold) and r != 0.0:
+if (np.sum(mt) == 0 or model.params['true'] < threshold) and r == 0.0:
     print('The experiment shows no or an acceptable amount of spreading, correction is not neccessary. Exiting...')
     quit()
 if r != 0.0:
